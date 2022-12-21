@@ -1,5 +1,5 @@
 const celd = [];
-const RCTC = 4; //Reticula o grilla
+const RCTC = 6; //Reticula o grilla
 let alto;
 let ancho;
 
@@ -133,7 +133,6 @@ function setup() {
   // celd[7].opci = [5, 10, 4];
   // celd[6].opci = [5, 6, 4, 15];
   // celd[13].opci = [5, 6, 4, 9];
-  print (celd);
 }
 
 
@@ -160,16 +159,84 @@ function draw() {
         const cldIndex = x + y * RCTC;
         const cldAct = celd[cldIndex];
         if (cldAct.colapse) {
+          
+          const indAzul = cldAct.opci[0];
+          const ruleAct = rules[indAzul];
+
           image(
-            azulejos[cldAct. opci[0]], 
+            azulejos[indAzul], 
             x * ancho, 
             y * alto,
             ancho,
             alto
             );
-        } 
+
+
+            //Monitorear UP
+            if(y > 0){
+              const indUP = x + (y - 1) *RCTC;
+              const celdUP = celd[indUP];
+              if (!celdUP.colapse) {
+                cambiarEntropia(
+                  celdUP, 
+                  ruleAct['UP'], 
+                  'DOWN'
+                );
+              }
+            }
+            //Monitorear RIGHT
+            if(x < RCTC - 1){
+              const indRIGHT = (x + 1) + y  *RCTC;
+              const celdRIGHT = celd[indRIGHT];
+              if (!celdRIGHT.colapse) {
+                cambiarEntropia(
+                  celdRIGHT, 
+                  ruleAct['RIGHT'], 
+                  'LEFT'
+                );
+              }
+            }
+            //Monitorear DOWN
+            if(y < RCTC - 1){
+              const indDOWN = x + (y + 1) *RCTC;
+              const celdDOWN = celd[indDOWN];
+              if (!celdDOWN.colapse) {
+                cambiarEntropia(
+                  celdDOWN, 
+                  ruleAct['DOWN'], 
+                  'UP'
+                );
+              }
+            }
+            //Monitorear LEFT
+            if(x > 0){
+              const indLEFT = (x -1) + y  *RCTC;
+              const celdLEFT = celd[indLEFT];
+              if (!celdLEFT.colapse) {
+                cambiarEntropia(
+                  celdLEFT, 
+                  ruleAct['LEFT'], 
+                  'RIGHT'
+                );
+              }
+            }
+        } else {
+          strokeWeight(4);
+          rect(x * ancho, y * alto, ancho, alto);
+        }
       }
     }
-    //noLoop();
+    // noLoop();
   }
+}
+
+function cambiarEntropia(_celda, _rule, _ops){
+  const newOpt = [];
+  for (let i = 0; i < _celda.opci.length; i++) {
+    if(_rule == rules[_celda.opci[i]][_ops]){                    
+      const celdCompa = _celda.opci[i];
+      newOpt.push(celdCompa);
+    }
+  }
+  _celda .opci = newOpt;
 }
