@@ -1,5 +1,5 @@
 const celd = [];
-const RCTC = 6; //Reticula o grilla
+const RCTC = 10; //Reticula o grilla
 let alto;
 let ancho;
 
@@ -140,6 +140,7 @@ function draw() {
   const celdDisp = celd.filter((celda) => celda.colapse == false);
 
   if (celdDisp.length > 0) {
+    
     celdDisp.sort((a,b)=> {
       return a.opci.length - b.opci.length;
     });
@@ -221,8 +222,12 @@ function draw() {
               }
             }
         } else {
-          strokeWeight(4);
+          
+          //Dibujar reticula
+
+          /*strokeWeight(1);
           rect(x * ancho, y * alto, ancho, alto);
+          */
         }
       }
     }
